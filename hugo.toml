@@ -1,6 +1,6 @@
 baseURL = 'https://example.org/'
 title = "Yongy's Blog"
-copyright = "©2025 yang yupeng"
+copyright = "yang yupeng"
 
 languageCode = 'en'
 hasCJKLanguage = true
@@ -37,7 +37,7 @@ enableEmoji = true
 	shortname = ""
 
 [params.utterances]
-	repo = "Youpen-y/roundshot"
+	repo = "Youpen-y/Youpen-y.github.io"
 	issueTerm = "pathname"
 	theme = "preferred-color-scheme"
 	crossorigin = "anonymous"
@@ -106,7 +106,7 @@ enableEmoji = true
   mediaType = "text/toml"
 
 [outputs]
-  home = ["HTML", "RSS", "TOML"]
+  home = ["HTML", "RSS", "TOML", "JSON"]
 
 [minify]
   disableCSS = false
