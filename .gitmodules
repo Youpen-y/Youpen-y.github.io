@@ -1,0 +1,3 @@
+[submodule "themes/neonote"]
+	path = themes/neonote
+	url = https://github.com/Youpen-y/neonote.git

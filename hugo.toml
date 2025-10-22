@@ -1,0 +1,136 @@
+baseURL = 'https://example.org/'
+title = "Yongy's Blog"
+copyright = "©2025 yang yupeng"
+
+languageCode = 'en'
+hasCJKLanguage = true
+defaultContentLanguage = "en"
+
+theme = "neonote"
+
+enableRobotsTXT = true
+enableEmoji = true
+[pagination]
+	pagerSize = 8
+
+[params.author]
+	author = "Yongy"
+	email = "yongy2022@outlook.com"
+
+[params]
+	description = "Yongy's Blogs"
+	style = "auto"
+	logo = "https://avatars.githubusercontent.com/u/44435912?v=4"
+	slogan = "Hack the world, enjoy the ride!"
+
+[params.assets]
+	css = ["css/fonts.css", "css/custom.css"]
+
+[params.global_comments]
+  enable = true
+  comment_system = "utterances" # or giscus, utterances
+
+[params.disqus]
+	shortname = ""
+
+[params.utterances]
+	repo = "Youpen-y/roundshot"
+	issueTerm = "pathname"
+	theme = "preferred-color-scheme"
+	crossorigin = "anonymous"
+
+[params.giscus]
+    repo = "Youpen-y/roundshot"
+    repoID = "R_kgDOPco92A"
+    category = "Announcements"
+    categoryID = "DIC_kwDOPco92M4CvCfZ"
+    dataTheme = "dark"
+    dataLang = "en"
+
+[params.math]
+	enable = false
+	use = "katex"
+
+[params.nav]
+	showCategories = false
+	showTags = false
+
+[taxonomies]
+	category="categories"
+	tag = "tags"
+
+[[params.nav.custom]]
+  title = "Index"
+  url = "/"
+
+[[params.nav.custom]]
+  title = "Tags"
+  url = "/tags/"
+
+[[params.nav.custom]]
+  title = "Archives"
+  url = "/archives/"
+
+[[params.nav.custom]]
+  title = "About"
+  url = "/about/"
+
+# Chroma highlight
+[markup.highlight]
+  codeFences = true
+  guessSyntax = true
+  noClasses = true
+  style = "dracula"
+#  style = "github"
+
+[markup.goldmark.renderer]
+  unsafe = true #enable raw HTML in Markdown
+
+[markup.tableOfContents]
+  endLevel = 3
+  ordered = false
+  startLevel = 2
+
+[permalinks]
+  post = "/:year/:month/:title/"
+
+[mediaTypes]
+[mediaTypes."text/toml"]
+  suffixes = ["toml"]
+
+[ouputFormats]
+[outputFormats.TOML]
+  mediaType = "text/toml"
+
+[outputs]
+  home = ["HTML", "RSS", "TOML"]
+
+[minify]
+  disableCSS = false
+  disableHTML = false
+  disableJS = false
+  disableJSON = false
+  disableSVG = true
+  disableXML = false
+  minifyOutput = true
+  [minify.tdewolff]
+    [minify.tdewolff.css]
+      keepCSS2 = true
+      precision = 1
+    [minify.tdewolff.html]
+      keepComments = false
+      keepConditionalComments = true
+      keepDefaultAttrVals = true
+      keepDocumentTags = true
+      keepEndTags = true
+      keepQuotes = false
+      keepWhitespace = false
+    [minify.tdewolff.js]
+      keepVarNames = false
+      precision = 1
+    [minify.tdewolff.json]
+      precision = 0
+    [minify.tdewolff.svg]
+      precision = 1
+    [minify.tdewolff.xml]
+      keepWhitespace = false
