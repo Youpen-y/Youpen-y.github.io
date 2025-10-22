@@ -31,7 +31,7 @@ enableEmoji = true
 
 [params.global_comments]
   enable = true
-  comment_system = "utterances" # or giscus, utterances
+  comment_system = "giscus" # utterances
 
 [params.disqus]
 	shortname = ""
@@ -43,11 +43,11 @@ enableEmoji = true
 	crossorigin = "anonymous"
 
 [params.giscus]
-    repo = "Youpen-y/roundshot"
-    repoID = "R_kgDOPco92A"
+    repo = "Youpen-y/Youpen-y.github.io"
+    repoID = "R_kgDOQHN1Fw"
     category = "Announcements"
-    categoryID = "DIC_kwDOPco92M4CvCfZ"
-    dataTheme = "dark"
+    categoryID = "DIC_kwDOQHN1F84Cw8My"
+    dataTheme = "preferred_color_scheme"
     dataLang = "en"
 
 [params.math]
