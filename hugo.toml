@@ -10,8 +10,11 @@ theme = "neonote"
 
 enableRobotsTXT = true
 enableEmoji = true
+[caches.images]
+	dir = ':cacheDir/images'
+
 [pagination]
-	pagerSize = 8
+	pagerSize = 6
 
 [params.author]
 	author = "Yongy"
