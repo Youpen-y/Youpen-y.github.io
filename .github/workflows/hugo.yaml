@@ -5,7 +5,7 @@ on:
       - main
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
@@ -104,6 +104,13 @@ jobs:
           else
             echo "⚠️ stork.toml not found, skipping index generation"
           fi
+      - name: Commit and push generated Stork index
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@user.noreply.github.com"
+          git add public/posts.st
+          git commit -m "chore: update Stork search index" || echo "No changes to commit"
+          git push
       - name: Cache save
         id: cache-save
         uses: actions/cache/save@v4
