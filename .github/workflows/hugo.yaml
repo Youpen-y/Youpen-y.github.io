@@ -98,12 +98,8 @@ jobs:
             --minify
       - name: Generate Stork search index
         run: |
-          if [ -f stork.toml ]; then
-            stork build --input stork.toml --output public/posts.st
-            echo "✅ Stork index generated successfully"
-          else
-            echo "⚠️ stork.toml not found, skipping index generation"
-          fi
+          stork build --input stork.toml --output public/posts.st
+          echo "✅ Stork index generated successfully"
       - name: Commit and push generated Stork index
         run: |
           git config --global user.name "github-actions[bot]"
