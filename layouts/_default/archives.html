@@ -1,0 +1,27 @@
+{{- define "main" -}}
+<div>
+    <section class="article-header">
+      <h1>{{- i18n "archives" | safeHTML -}}</h1>
+    </section>
+    <div class="article-container">
+      {{- $posts := where .Site.RegularPages "Section" "posts" -}}
+      {{- $postCount := len $posts -}}
+      <p class="archive-text">{{ i18n "archives-count" }}{{- $postCount -}}</p>
+
+      {{- range ($posts.GroupByDate "2006") -}}
+      {{- if (gt .Key 2016) -}}
+      <p class="archive-year">{{- .Key -}}</p>
+      <ul class="archive-list">
+          {{- range .Pages -}}
+              <li>
+                  <span class="archive-date">{{- .PublishDate.Format "2006-01-02" -}}</span>
+                  <a href="{{- .RelPermalink -}}">{{- .Title -}}</a>
+              </li>
+          {{- end -}}
+      </ul>
+      {{- end -}}
+      {{- end -}}
+
+</div>
+</div>
+{{- end -}}
