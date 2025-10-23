@@ -1,6 +1,6 @@
 +++
 date = '2025-10-23T02:48:40+08:00'
 draft = false
-title = 'Test'
+title = '测试'
 +++
-This is a test page!
+中文测试！

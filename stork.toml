@@ -2,6 +2,7 @@
 base_directory = "public"
 url_prefix = "https://youpen-y.github.io/"
 files = [
-	{path = "posts/hello-world/index.html", url = "/posts/hello-world", title = "Hello World"}
+	{path = "posts/hello-world/index.html", url = "/posts/hello-world", title = "Hello World"},
+	{path = "posts/test/index.html", url = "/posts/test", title = "测试"}
 ]
 
