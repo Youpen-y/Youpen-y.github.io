@@ -106,7 +106,7 @@ enableEmoji = true
   mediaType = "text/toml"
 
 [outputs]
-  home = ["HTML", "RSS", "TOML", "JSON"]
+  home = ["HTML", "RSS", "TOML"]
 
 [minify]
   disableCSS = false

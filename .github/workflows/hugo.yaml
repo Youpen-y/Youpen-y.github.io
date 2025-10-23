@@ -22,6 +22,7 @@ jobs:
       GO_VERSION: 1.25.3
       HUGO_VERSION: 0.152.0
       NODE_VERSION: 22.20.0
+      STORK_VERSION: 1.6.0
       TZ: Asia/Shanghai
     steps:
       - name: Checkout
@@ -57,12 +58,25 @@ jobs:
           tar -C "${HOME}/.local/hugo" -xf "hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
           rm "hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
           echo "${HOME}/.local/hugo" >> "${GITHUB_PATH}"
+      - name: Cache Stork
+        id: cache-stork
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/stork
+          key: stork-${{ env.STORK_VERSION }}-${{ runner.os }}
+      - name: Install Stork
+        if: steps.cache-stork.outputs.cache-hit != 'true'
+        run: |
+          wget https://github.com/jameslittle230/stork/releases/download/v1.6.0/stork-ubuntu-22-04
+          chmod +x stork-ubuntu-22-04
+          sudo mv stork-ubuntu-22-04 /usr/local/bin/stork
       - name: Verify installations
         run: |
           echo "Dart Sass: $(sass --version)"
           echo "Go: $(go version)"
           echo "Hugo: $(hugo version)"
           echo "Node.js: $(node --version)"
+          echo "Stork: $(stork --version)"
       - name: Install Node.js dependencies
         run: |
           [[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true
@@ -81,9 +95,15 @@ jobs:
         run: |
           hugo \
             --gc \
-            --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/" \
-            --cacheDir "${{ runner.temp }}/hugo_cache"
+            --minify
+      - name: Generate Stork search index
+        run: |
+          if [ -f stork.toml ]; then
+            stork build --input stork.toml --output public/posts.st
+            echo "✅ Stork index generated successfully"
+          else
+            echo "⚠️ stork.toml not found, skipping index generation"
+          fi
       - name: Cache save
         id: cache-save
         uses: actions/cache/save@v4
