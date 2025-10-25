@@ -105,9 +105,14 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@user.noreply.github.com"
-          git add public/posts.st
-          git commit -m "chore: update Stork search index" || echo "No changes to commit"
-          git push
+
+          if git diff --quiet public/posts.st; then
+            echo "No changes in Stork index, skipping commit"
+          else
+            git add public/posts.st
+            git commit -m "chore: update Stork search index" || echo "No changes to commit"
+            git push
+          fi
       - name: Cache save
         id: cache-save
         uses: actions/cache/save@v4
