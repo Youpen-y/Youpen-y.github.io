@@ -91,7 +91,7 @@ a:hover {
 
 .wrapper {
   display: grid;
-  grid-template-columns: 1fr min(clamp(65ch, 70vw, 150ch), calc(100% - 64px)) 1fr;
+  grid-template-columns: 1fr min(clamp(60ch, 65vw, 100ch), calc(100% - 64px)) 1fr;
   grid-column-gap: 32px;
 }
 
@@ -113,13 +113,15 @@ a:hover {
 
 .site-name {
   display: inline-block;
+	font-family: "Averia Sans Libre";
   font-weight: 600;
-  font-size: 21px;
+  font-size: 20px;
   color: var(--site-name-color);
 }
 
 .site-slogan {
-  font-size: 14px;
+	font-family: "Averia Sans Libre";
+  font-size: 16px;
   color: var(--site-name-color);
 }
 
@@ -132,6 +134,7 @@ a:hover {
 
 .nav-item {
   display: inline-block;
+	font-family: "Averia Sans Libre";
   font-size: 18px;
   padding-right: 6px;
   margin: 2px 3px 2px 0;
@@ -182,6 +185,7 @@ html[data-theme="dark"] .dark-hidden {
 }
 
 .note-title {
+	font-family: "Averia Sans Libre";
   font-size: 19px;
   font-weight: 700;
 }
@@ -196,6 +200,7 @@ html[data-theme="dark"] .dark-hidden {
 .note-content,
 .note-imgs,
 .note-labels {
+	font-family: "Averia Sans Libre";
   margin-top: 4px;
   text-justify: inter-word;
 }
@@ -232,6 +237,7 @@ html[data-theme="dark"] .dark-hidden {
 }
 
 .tag-cloud {
+	font-family: "Averia Sans Libre";
   margin: 2em 0 3em;
   text-align: center;
 }
@@ -245,7 +251,7 @@ html[data-theme="dark"] .dark-hidden {
 }
 
 .archive-year {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--title-color);
   margin-top: 20px;
@@ -253,15 +259,20 @@ html[data-theme="dark"] .dark-hidden {
 }
 
 .archive-list {
+	font-family: "Averia Sans Libre";
+	font-size: 18px;
   list-style: none;
 }
 
 .archive-date {
-  flex: 0 0 130px;
+	font-family: "Averia Sans Libre";
+  flex: 0 0 100px;
   color: var(--title-color);
 }
 
 .archive-text {
+	font-family: "Averia Sans Libre";
+	font-size: 18px;
   color: var(--body-color);
 }
 
@@ -274,11 +285,12 @@ ul.archive-list li {
 }
 
 .article-header {
+	font-family: "Averia Sans Libre";
   margin: 20px 0;
 }
 
 .article-date {
-  font-size: 15px;
+  font-size: 16px;
   margin-top: 20px;
   color: #838387;
 }
