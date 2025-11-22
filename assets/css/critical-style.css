@@ -226,9 +226,14 @@ html[data-theme="dark"] .dark-hidden {
   opacity: 0.5;
 }
 
-.footer {
-  font-size: 14px;
-  margin: 40px 0 20px;
+/* .footer { */
+/*   font-size: 14px; */
+/*   margin: 40px 0 20px; */
+/* } */
+
+.footnotes {
+	font-size: 15px;
+	margin: 40px 0 20px;
 }
 
 .footer-wrap {

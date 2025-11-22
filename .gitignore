@@ -1,0 +1,10 @@
+# Hugo output
+/public/
+/resources/_gen/
+/assets/_gen/
+hugo_stats.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
