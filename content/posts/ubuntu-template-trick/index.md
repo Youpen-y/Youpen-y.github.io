@@ -29,7 +29,7 @@ XDG_PICTURES_DIR="$HOME/Pictures"
 XDG_VIDEOS_DIR="$HOME/Videos"
 ```
 
-<img src='./template-example.png' title="string concatenation heatmap" style="float: left; margin: 20px;width: 20%;">
+<img src='./template-example.png' title="ubuntu template use case" style="float: left; margin: 20px;width: 20%;">
 其中 `Desktop`，`Download`，`Public` 等目录较为常用，不作分析，只提示一下我们可以为其改名或者删除默认提供的目录项（如果你觉得多余的话）。
 
 回到 `Templates`，顾名思义，它是模板集（中文很多情况下应该在复数后面加上“集/群/簇”）目录。Ubuntu 使用该目录来存放一些常用的文件模板，以便我们可以迅速创建特定格式文件。如左图所示，我们可以通过预先存放的 `Application.desktop`, `README.md`, `Script.sh`, `Thoughts.md`, `Tutorial.md` 
@@ -38,7 +38,8 @@ XDG_VIDEOS_DIR="$HOME/Videos"
 
 
 ## 模板示例
-这里是一些示例模板文件:
+这里是一些示例模板文件 (更多可见 [GitHub ubuntu-templates](https://github.com/Youpen-y/ubuntu-templates))
+:
 ### `Application.desktop`
 ```
 [Desktop Entry]
@@ -64,6 +65,118 @@ Terminal=false
 ```
 #!/usr/bin/env bash
 
-# some common configuration code(color, usage...)
+# Tool - Description of tool
+#
+# Usage:
+#
+# Author:
+# Version:
+# License:
+
+set -euo pipefail   # strict mode
+IFS=$'\n\t'
+
+# --- Core path definition ---
+readonly SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+readonly SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
+
+# --- Color definition ---
+setup_colors() {
+	if [[ -t 1 || -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
+		readonly RED='\033[0;31m'
+		readonly GREEN='\033[0;32m'
+		readonly YELLOW='\033[0;33m'
+		readonly BLUE='\033[0;34m'
+		readonly MAGENTA='\033[0;35m'
+		readonly CYAN='\033[0;36m'
+		readonly WHITE='\033[0;37m'
+		readonly BOLD='\033[1m'
+		readonly NC='\033[0m'
+	else
+		readonly RED='' GREEN='' YELLOW='' BLUE='' MAGENTA='' CYAN='' WHITE='' BOLD='' NC=''
+	fi
+}
+
+# --- Logging function ---
+log() { echo -e "${BLUE}[$(date +'%Y-%m-%dT%H:%M:%S%z')]${NC} $*"; }
+info() { echo -e "${GREEN}[INFO]${NC} $*"; }
+warn() { echo -e "${YELLOW}[WARN]${NC} $*" >&2; }
+error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
+
+# --- Helper function ---
+show_help() {
+	cat << EOF
+Usage: ${SCRIPT_NAME} [OPTION] [ARGS]
+
+Description:
+	...
+
+Options:
+	-h, --help      show help message
+
+Arguments:
+
+Example:
+
+EOF
+}
+
+# --- cleanup function ---
+cleanup() {
+	# 1. get exit status code
+	local exit_code=$?
+
+	# 2. disable trap
+	trap - SIGINT SIGTERM EXIT
+
+	# 3. clean temp files...
+
+
+	# 4. give exit hint
+	if [ "$exit_code" -ne 0 ]; then
+		error "Script exit abnormally!"
+	fi
+
+	# 5. exit
+	exit "$exit_code"
+}
+trap cleanup SIGINT SIGTERM EXIT
+
+# --- Arguments parse ---
+parse_params() {
+	# flags
+	# VERBOSE=false
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+			-h|--help)
+				show_help
+				exit 0
+				;;
+			# ...
+			# shift
+			# ;;
+			-?*)
+				error "Unknown option: $1"
+				show_help
+				exit 1
+				;;
+		esac
+	done
+}
+
+# --- main logic ---
+main() {
+	setup_colors
+	parse_params "$@"
+
+	info "${BOLD}Script started.${NC}"
+	# ...
+
+	info "${BOLD}Script completed successfully.${NC}"
+}
+
+# start script
+main "$@"
 ```
 ...
