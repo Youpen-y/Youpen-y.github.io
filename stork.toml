@@ -7,5 +7,6 @@ files = [
 	{path = "posts/json/index.html", url = "/posts/json", title = "JSON 简介"},
 	{path = "posts/immutable-sequences-concatenation/index.html", url = "/posts/immutable-sequences-concatenation", title = "Python Immutable Sequences Concatenation"},
 	{path = "posts/ubuntu-template-trick/index.html", url = "/posts/ubuntu-template-trick", title = "The Ubuntu Templates Directory Hack"},
-	{path = "posts/what-does-ai-mean/index.html", url = "/posts/what-does-ai-mean", title = "AI 意味着什么？"}
+	{path = "posts/what-does-ai-mean/index.html", url = "/posts/what-does-ai-mean", title = "AI 意味着什么？"},
+	{path = "posts/python-inspect/index.html", url = "/posts/python-inspect", title = "Python inspect 模块"}
 ]
