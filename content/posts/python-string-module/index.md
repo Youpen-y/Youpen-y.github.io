@@ -7,6 +7,7 @@ comments: true
 ---
 `Python` 标准库中的 `string` 模块提供了一些与字符串处理相关的常量、类和辅助函数。用于使用预定义字符集（如所有字母、数字等）、自定义格式化规则、使用简单的模板替换字符串内容等场景。
 
+---
 #### 字符串常量
 
 | 常量 | 说明 |
@@ -19,7 +20,7 @@ comments: true
 | `string.hexdigits` | `0123456789abcdefABCDEF` |
 | `string.punctuation` | <code>!"#$%&\'()*+,-./:;<=>?@[\\]^_`{\|}~</code> |
 | `string.printable` | <code>0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{\|}~ \t\n\r\x0b\x0c</code> |
-
+---
 
 #### 类
 1. `Formatter` -- 自定义字符串格式化类
@@ -121,7 +122,7 @@ from string import Template
 t = Template("Hello, $name!")
 print(t.substitute(name="Alice"))
 ```
-
+---
 #### 辅助函数
 `string.capwords(s, sep=None)`: 将字符串中每个单词的首字母大写，而其他字母小写，可以指定单词分隔符。
 ```python
