@@ -11,4 +11,5 @@ files = [
 	{path = "posts/python-inspect/index.html", url = "/posts/python-inspect", title = "Python inspect 模块"},
 	{path = "posts/tdd-with-claude-code/index.html", url = "/posts/tdd-with-claude-code", title = "TDD with Claude Code"},
 	{path = "posts/claude-code-tools/index.html", url = "/posts/claude-code-tools", title = "Claude Code工具"},
+	{path = "posts/sse-tutorial/index.html", url = "/posts/sse-tutorial", title = "SSE 教程"},
 ]
