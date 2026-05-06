@@ -12,4 +12,5 @@ files = [
 	{path = "posts/tdd-with-claude-code/index.html", url = "/posts/tdd-with-claude-code", title = "TDD with Claude Code"},
 	{path = "posts/claude-code-tools/index.html", url = "/posts/claude-code-tools", title = "Claude Code工具"},
 	{path = "posts/sse-tutorial/index.html", url = "/posts/sse-tutorial", title = "SSE 教程"},
+	{path = "posts/understanding-monorepos-managing-multiple-projects-in-one-repository/index.html", url = "/posts/understanding-monorepos-managing-multiple-projects-in-one-repository", title = "理解 Monorepo：在单个仓库中管理多个项目"},
 ]
