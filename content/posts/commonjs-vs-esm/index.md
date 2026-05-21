@@ -16,20 +16,20 @@ comments: true
 
 看到互联网的魔力之后，商业界为之疯狂，认为 Web 将改变整个世界。Jim Clark（Silicon Graphics 创始人）敏锐觉察到 Web 将成为下一代计算平台，于是找来 Marc Andreessen 和 Eric Bina 创办 Netscape，Netscape 从头开发下一代类-Mosaic 的浏览器，迅速取代了 Mosaic。
 
-90 年代同时也是"脚本语言"潮，当时的脚本语言真正的意思是用来粘合已有软件组件的语言。比如微软的 Visual Basic，用来编排 Microsoft Office 应用；苹果的 AppleScript，用于自动化 macOS 上的任务。由于 Berners-Lee 最初发明 Web 时，目标只是为了让科学家共享文档，因此最核心的技术是`URL` + `HTTP` + `HTML`。HTML 作为一个静态的标记语言，当时用来描述文档的"模样"。随着 Netscape 推广 Web，一个主要的问题随之而来，就是 Web 要不要支持脚本语言？该如何支持？
+90 年代同时也是"脚本语言"潮，当时的脚本语言真正的意思是用来粘合已有软件组件的语言。比如微软的 Visual Basic，用来编排 Microsoft Office 应用；苹果的 AppleScript，用于自动化 macOS 上的任务。由于 Berners-Lee 最初发明 Web 时，目标只是为了让科学家共享文档，因此最核心的技术是`URL` + `HTTP` + `HTML`三叉戟。HTML 作为静态的标记语言，被用来描述文档的结构。随着 Netscape 推广 Web，一个主要的问题随之而来，就是 Web 要不要支持脚本语言？该如何支持？
 
-网页脚本的候选语言最初包含 Scheme, Unix-based 语言如 Perl, Python 和 Tcl，以及微软的 Visual Basic。于是 Brendan Eich 被招进来在浏览器中实现`Scheme`（一种 Lisp 方言），但 Eich 一入职，发现做什么语言已经不单是技术问题，而是商业战争。1994 年底，Netscape 拒绝 Microsoft 较低的收购报价，管理层认为微软之后会发动"全面战争"。微软则认为 Web 可能取代操作系统，成为新的软件平台，于是紧急开发 Internet Explorer，抢占 Web 市场。与此同时，Sun Microsystems 正疯狂宣传 Java，提出那句经典的"Write Once, Run Anywhere"口号，这同样对 Microsoft 产生了巨大的威胁，于是和 Netscape 一拍即合，Java 将嵌入 Netscape 2。
+网页脚本的候选语言最初包含 Scheme, Unix-based 语言如 Perl, Python 和 Tcl，以及微软的 Visual Basic。一开始 Brendan Eich 被招进来在浏览器中实现`Scheme`（一种 Lisp 方言），但 Eich 入职后，发现做什么语言已经不单是技术问题，而是商业战争。1994 年底，Netscape 拒绝 Microsoft 较低的收购报价，管理层认为微软之后会发动"全面战争"。微软则认为 Web 可能取代操作系统，成为新的软件平台，于是紧急开发 Internet Explorer，抢占 Web 市场。与此同时，Sun Microsystems 正疯狂宣传 Java，提出那句经典的"Write Once, Run Anywhere"口号，这同样对 Microsoft 产生了巨大的威胁，于是和 Netscape 一拍即合，Java 将嵌入之后的 Netscape 2。
 > 微软当时的口号："Embrace, Extend, Extinguish"，意思就是先拥抱开放标准，再加入自己的扩展，最后让别人无法兼容而被"消灭"。
 
 鉴于上述背景，为网页做脚本语言的 Eich 需要考虑商业与市场现实，Scheme 优雅但学术性太强，推广难度大，Visual Basic 是微软路线也不可取，其他语言名声不够大，不符合战略要求。当时 Java 的商业品牌火热，再加上微软已经准备进场，亟需迅速发布一款 Web 脚本语言，建立标准，于是 JavaScript 诞生了，它设计轻量、语法简单、专用用途，和今天的模样是天壤之别。
 > 从上面历史可以学到什么呢？
 > - Eich 的 Scheme 背景，使得 JavaScript 中携带了很多函数式思想。如：函数作为一等公民，闭包，map，filter，……，GC，动态类型。
-> - 为什么大公司都要强建标准？ —— 标准就是话语权。AI 时代，现在很多接口、协议的标准都在疯狂竞争中，像 CLAUDE.md 与 AGENTS.md，open responses 等等
-> - 会不会有新的语言诞生呢？ —— 需要进一步探索当下的需求与问题究竟是什么？是 Agent 间的沟通？还是其他呢？候选名单（zero，Mojo，nano）还在增长中
+> - 为什么大公司都要建立标准？ —— 标准就是话语权。AI 时代，现在很多接口、协议的标准都在疯狂竞争中，像 CLAUDE.md 与 AGENTS.md，open responses 等等。
+> - 会不会有新的语言诞生呢？ —— 需要进一步探索当下的需求与问题究竟是什么？是 Agent 间的沟通？还是其他呢？候选名单（zero，Mojo，nano）还在增长中。
 
 ### 正文开始
 
-让我们快进到文档主题相关的内容，2009 年，Kevin Dangoor 发布了一篇题为《What Server Side JavaScript needs》，探讨了服务端 JavaScript 缺少完善的生态系统问题，比如需要跨解释器的标准库、需要一些标准数据库接口、需要一种引入其他模块的标准、需要代码打包与分发机制、需要软件包仓库轻松处理软件包安装与依赖等问题。因此 CommonJS 小组最终诞生了，一年后，CommonJS 构造了一个模块化系统，一个跨解释器标准库，一些标准接口，一个软件包系统以及一个软件包仓库，这些概念最终被 Node.js 引入而成为事实性的标准。直到 2015 年 ES6（ECMAScript 2015）规范发布，正式从语言规范上引入模块系统以及现代化语法。
+让我们快进到文档主题相关的内容，2009 年，Kevin Dangoor 发布了一篇题为《What Server Side JavaScript needs》，探讨了服务端 JavaScript 缺少完善的生态系统问题，比如需要跨解释器的标准库、需要标准数据库接口、需要一种引入其他模块的标准、需要代码打包与分发机制、需要软件包仓库轻松处理软件包安装与依赖等等。因此 CommonJS 小组诞生了，一年后，CommonJS 构造了一个模块化系统，一个跨解释器标准库，一些标准接口，一个软件包系统以及一个软件包仓库，这些概念最终被 Node.js 引入而成为事实性的标准。直到 2015 年 ES6（ECMAScript 2015）规范发布，正式从语言规范上引入模块系统以及现代化语法。
 > 这里不得不提一下 Node.js 的作者 [Ryan Dahl](https://tinyclouds.org/)，也是 deno 的联合创始人。
 
 因此，透过历史脉络来看两者区别就很清晰了，CommonJS 和 ES Modules（ECMAScript Modules, ESM）是 Node.js 的两种模块系统，CommonJS 出现得早，并成为一段时期的事实标准，ES Modules 来得晚，但是真正的语言标准，未来在向 ES Modules 演进。
@@ -40,7 +40,7 @@ comments: true
     "type": "module"
 }
 ```
-默认情况（即没有 `type` 时），Node.js 会把 `.js` 当作 CommonJS，当设置为 `module` 时，Node.js 会把 `.js` 当作 ES Modules。
+默认情况（即没有 `type` 时），Node.js 采用 CommonJS 模块系统，当设置为 `module` 时，Node.js 会把 `.js` 当作 ES Modules。
 
 2. 语法区别
 
