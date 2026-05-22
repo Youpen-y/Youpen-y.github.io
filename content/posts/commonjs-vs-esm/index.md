@@ -40,7 +40,7 @@ comments: true
     "type": "module"
 }
 ```
-默认情况（即没有 `type` 时），Node.js 采用 CommonJS 模块系统，当设置为 `module` 时，Node.js 会把 `.js` 当作 ES Modules。
+当设置为 `commonjs` 时，Node.js 采用 CommonJS 模块系统；当设置为 `module` 时，Node.js 会把 JavaScript 文件解释为 ES Modules。 如果未设置，Node.js 会检查模块的源代码以查找 ES module 语法，如果找到，则将代码作为 ES module 运行；否则将视为 CommonJS 模块。
 
 2. 语法区别
 
