@@ -15,4 +15,5 @@ files = [
 	{path = "posts/understanding-monorepos-managing-multiple-projects-in-one-repository/index.html", url = "/posts/understanding-monorepos-managing-multiple-projects-in-one-repository", title = "理解 Monorepo：在单个仓库中管理多个项目"},
 	{path = "posts/termux-pi-the-next-trend-about-to-take-off/index.html", url = "/posts/termux-pi-the-next-trend-about-to-take-off", title = "理解 Monorepo：Termux+pi: The Next Tread about to Take off"},
 	{path = "posts/commonjs-vs-esm/index.html", url = "/posts/commonjs-vs-esm", title = "CommonJS vs ES Modules"},
+	{path = "posts/llm-context-window/index.html", url = "/posts/llm-context-window", title = "LLM context window and tokens"},
 ]
