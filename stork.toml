@@ -16,4 +16,5 @@ files = [
 	{path = "posts/termux-pi-the-next-trend-about-to-take-off/index.html", url = "/posts/termux-pi-the-next-trend-about-to-take-off", title = "理解 Monorepo：Termux+pi: The Next Tread about to Take off"},
 	{path = "posts/commonjs-vs-esm/index.html", url = "/posts/commonjs-vs-esm", title = "CommonJS vs ES Modules"},
 	{path = "posts/llm-context-window/index.html", url = "/posts/llm-context-window", title = "LLM context window and tokens"},
+	{path = "posts/git-hooks/index.html", url = "/posts/git-hooks", title = "Git Hooks"},
 ]
