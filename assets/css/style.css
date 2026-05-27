@@ -130,7 +130,7 @@ table {
 }
 
 .markdown-body li + li {
-  margin-top: 20px;
+  margin-top: 6px;
 }
 
 .markdown-body li > :first-child {
