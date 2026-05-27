@@ -21,8 +21,16 @@
 {{- partial "outdated-warning.html" (dict "ageDays" $ageDays "context" .) -}}
 {{- end -}}
 
-<article class="markdown-body" {{- if $justify -}}style="text-align: justify;" {{- end -}}>
-    {{- .Content -}}
+<article class="markdown-body" data-pagefind-body {{- if $justify -}}style="text-align: justify;" {{- end -}}>
+    {{- $content := .Content -}}
+    {{- $firstImg := findRE `<img[^>]+src="([^"]+)"` $content 1 -}}
+    {{- if $firstImg -}}
+      {{- $imgSrc := replaceRE `<img[^>]+src="([^"]+)".*` "$1" (index $firstImg 0) -}}
+      {{- $cleanSrc := strings.TrimPrefix "./" $imgSrc -}}
+      {{- $absImg := printf "/posts/%s/%s" (path.Base .File.Dir) $cleanSrc -}}
+      <meta data-pagefind-meta="image[content]" content="{{ $absImg }}">
+    {{- end -}}
+    {{- $content -}}
 </article>
 </div>
 {{- partial "article-license.html" . -}}

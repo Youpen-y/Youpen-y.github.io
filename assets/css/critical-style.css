@@ -349,17 +349,64 @@ ul.archive-list li {
   color: var(--block-background-color);
 }
 
-input, .stork-message, .stork-result, .stork-title, .stork-excerpt {
+.search-wrapper {
+  margin-bottom: 20px;
+}
+
+.search-wrapper input {
   background-color: var(--background-color) !important;
   color: var(--site-name-color) !important;
 }
 
-input:focus {
+.search-wrapper input:focus {
   border-color: var(--color-primary) !important;
 }
 
-.stork-attribution {
-  display: none !important;
+/* pagefind overrides */
+.pagefind-ui__search-input {
+  border-color: #ccc !important;
+  color: var(--site-name-color) !important;
+}
+
+html[data-theme="dark"] .pagefind-ui__search-input {
+  border-color: #444 !important;
+}
+
+.pagefind-ui__result {
+  border-color: #ddd !important;
+}
+
+html[data-theme="dark"] .pagefind-ui__result {
+  border-color: #444 !important;
+}
+
+html[data-theme="dark"] .pagefind-ui {
+  --pagefind-ui-text: #e0e0e0 !important;
+  --pagefind-ui-primary: #e0e0e0 !important;
+  --pagefind-ui-background: #1a1a1a !important;
+  --pagefind-ui-border: #444 !important;
+  --pagefind-ui-tag: #333 !important;
+}
+
+html[data-theme="dark"] .pagefind-ui__search-input {
+  background-color: #1a1a1a !important;
+}
+
+html[data-theme="dark"] .pagefind-ui__search-clear {
+  background-color: #1a1a1a !important;
+  color: #ccc !important;
+}
+
+html[data-theme="dark"] .pagefind-ui__result-link {
+  color: var(--color-primary) !important;
+}
+
+html[data-theme="dark"] .pagefind-ui__result-excerpt {
+  color: #bbb !important;
+}
+
+html[data-theme="dark"] .pagefind-ui__message {
+  color: #999 !important;
 }
 
 .copy-btn {
