@@ -9,6 +9,20 @@
     const currentTheme = savedTheme || (systemPrefersLight ? 'light' : 'dark');
     htmlEl.dataset.theme = currentTheme;
 
+    // sync giscus theme on load
+    function syncGiscusTheme() {
+        const giscusFrame = document.querySelector('iframe.giscus-frame');
+        if (giscusFrame) {
+            giscusFrame.contentWindow.postMessage(
+                { giscus: { setConfig: { theme: currentTheme } } },
+                'https://giscus.app'
+            );
+        } else {
+            setTimeout(syncGiscusTheme, 500);
+        }
+    }
+    window.addEventListener('load', syncGiscusTheme);
+
     // toggle theme
     function toggleTheme(theme) {
         htmlEl.dataset.theme = theme;

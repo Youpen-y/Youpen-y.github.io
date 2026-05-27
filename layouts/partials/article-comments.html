@@ -1,0 +1,49 @@
+{{- $globalComments := .Site.Params.global_comments.enable | default false -}}
+{{- $pageComments := .Params.comments | default true -}}
+{{- $system := .Site.Params.global_comments.comment_system | default "" -}}
+
+{{- if and $globalComments $pageComments }}
+    <section class="article-discussion">
+        {{- if eq $system "disqus" }}
+            {{- if .Site.Params.disqus.shortname }}
+                {{- template "_internal/disqus.html" . -}}
+            {{- end }}
+        {{- else if eq $system "giscus" }}
+            <script>
+                function getGiscusTheme() {
+                    const saved = localStorage.getItem('theme');
+                    if (saved) return saved;
+                    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                }
+            </script>
+            <script src="https://giscus.app/client.js"
+                data-repo={{ .Site.Params.giscus.repo }}
+                data-repo-id={{ .Site.Params.giscus.repoID }}
+                data-category={{ .Site.Params.giscus.category }}
+                data-category-id={{ .Site.Params.giscus.categoryID }}
+                data-mapping="title"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-theme=""
+                data-lang={{ .Site.Params.giscus.dataLang }}
+				crossorigin={{ .Site.Params.giscus.crossorigin }}
+                async>
+            </script>
+            <script>
+                // Set correct theme before giscus loads
+                const giscusScript = document.querySelector('script[src*="giscus.app"]');
+                if (giscusScript) {
+                    giscusScript.setAttribute('data-theme', getGiscusTheme());
+                }
+            </script>
+        {{- else if eq $system "utterances" }}
+            <script src="https://utteranc.es/client.js"
+                repo={{ .Site.Params.utterances.repo }}
+                issue-term={{ .Site.Params.utterances.issueTerm }}
+                theme={{ .Site.Params.utterances.theme }}
+                crossorigin={{ .Site.Params.utterances.crossorigin }}
+                async>
+            </script>
+        {{- end }}
+    </section>
+{{- end}}
