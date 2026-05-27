@@ -2,10 +2,10 @@ pre {
   display: block;
   overflow: auto;
   font-size: 16px;
-  line-height: 23px;
+  line-height: 24px;
   /*padding: 12px 10px;*/
 	padding: 18px;
-  margin: 8px 0;
+  margin: 16px 0;
   word-wrap: normal;
   white-space: pre;
   border-radius: 8px;
@@ -70,8 +70,8 @@ table {
 .markdown-body h5,
 .markdown-body h6 {
   color: var(--title-color);
-  margin-top: 24px;
-  margin-bottom: 20px;
+  margin-top: 36px;
+  margin-bottom: 12px;
 }
 
 .markdown-body h1,

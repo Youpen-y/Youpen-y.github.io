@@ -12,7 +12,7 @@ html {
     segoe ui symbol;
   font-size: 18px;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.7;
   scroll-behavior: smooth;
   transition: color 0.3s, background-color 0.3s;
   word-wrap: break-word;
@@ -312,7 +312,7 @@ ul.archive-list li {
 
 .markdown-body p {
   margin-top: 0;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .pagination {
