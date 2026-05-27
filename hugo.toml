@@ -1,6 +1,6 @@
 baseURL = 'https://youpen-y.github.io/'
 title = "Yongy's Blog"
-copyright = "yang yupeng"
+copyright = "<a href='https://github.com/Youpen-y' target='_blank' rel='noopener'>Youpen-y</a>"
 
 languageCode = 'en'
 hasCJKLanguage = true
