@@ -38,6 +38,7 @@ html {
   --body-color: #444;
   --code-bg: #282c34;
   --code-border: #e0e0e0;
+  --heading-border: #ddd;
 }
 
 html[data-theme="dark"] {
@@ -53,6 +54,7 @@ html[data-theme="dark"] {
   --body-color: #e9e9e9;
   --code-bg: #0a0a0f;
   --code-border: #333;
+  --heading-border: #444;
 }
 
 h1,
@@ -69,15 +71,29 @@ h6 {
 }
 
 h1 {
-  font-size: 26px;
+  font-size: 30px;
+  font-weight: 700;
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 h3 {
   font-size: 22px;
+}
+
+h4 {
+  font-size: 19px;
+}
+
+h5 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 16px;
 }
 
 section > h1 {
