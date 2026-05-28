@@ -1,0 +1,213 @@
+{{- $url := .Get "url" -}}
+{{- $title := .Get "title" | default $url -}}
+{{- $height := .Get "height" | default "600" -}}
+
+<!-- Mobile: show link card -->
+<a class="embed-link-card" href="{{ $url }}" target="_blank" rel="noopener noreferrer">
+    <div class="embed-link-card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </div>
+    <div class="embed-link-card-text">
+        <div class="embed-link-card-title">{{ $title }}</div>
+        <div class="embed-link-card-url">{{ $url }}</div>
+    </div>
+    <div class="embed-link-card-arrow">›</div>
+</a>
+
+<!-- Desktop: show iframe -->
+<div class="embed-wrapper">
+    <div class="embed-header">
+        <div class="embed-header-dots">
+            <span></span><span></span><span></span>
+        </div>
+        <div class="embed-header-url">{{ $url }}</div>
+        <a class="embed-header-link" href="{{ $url }}" target="_blank" rel="noopener noreferrer" title="在新标签页打开">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+    </div>
+    <iframe src="{{ $url }}" 
+            width="100%" 
+            height="{{ $height }}" 
+            frameborder="0" 
+            allowfullscreen 
+            class="embed-iframe"
+            loading="lazy">
+    </iframe>
+</div>
+
+<style>
+/* === Mobile: link card (default visible) === */
+.embed-link-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    margin: 1em 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.embed-link-card:hover {
+    border-color: #999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.embed-link-card-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #f0f0f0;
+    color: #666;
+}
+
+.embed-link-card-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.embed-link-card-title {
+    font-weight: 600;
+    font-size: 0.95em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.embed-link-card-url {
+    font-size: 0.8em;
+    color: #999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+
+.embed-link-card-arrow {
+    flex-shrink: 0;
+    font-size: 1.4em;
+    color: #bbb;
+}
+
+/* === Desktop: iframe (default hidden) === */
+.embed-wrapper {
+    display: none;
+}
+
+/* === Desktop styles === */
+@media (min-width: 769px) {
+    .embed-link-card {
+        display: none;
+    }
+
+    .embed-wrapper {
+        display: block;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        margin: 1.5em 0;
+        overflow: hidden;
+    }
+
+    .embed-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .embed-header-dots {
+        display: flex;
+        gap: 6px;
+    }
+
+    .embed-header-dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ddd;
+    }
+
+    .embed-header-url {
+        flex: 1;
+        font-size: 0.8em;
+        color: #999;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .embed-header-link {
+        color: #999;
+        text-decoration: none;
+        flex-shrink: 0;
+    }
+
+    .embed-header-link:hover {
+        color: #666;
+    }
+
+    .embed-iframe {
+        width: 100%;
+        display: block;
+    }
+}
+
+/* === Dark mode === */
+html[data-theme='dark'] .embed-link-card {
+    border-color: #444;
+}
+
+html[data-theme='dark'] .embed-link-card:hover {
+    border-color: #666;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+html[data-theme='dark'] .embed-link-card-icon {
+    background: #333;
+    color: #aaa;
+}
+
+html[data-theme='dark'] .embed-link-card-url {
+    color: #666;
+}
+
+html[data-theme='dark'] .embed-link-card-arrow {
+    color: #555;
+}
+
+@media (min-width: 769px) {
+    html[data-theme='dark'] .embed-wrapper {
+        border-color: #444;
+    }
+
+    html[data-theme='dark'] .embed-header {
+        background: #2a2a2a;
+        border-bottom-color: #444;
+    }
+
+    html[data-theme='dark'] .embed-header-dots span {
+        background: #555;
+    }
+
+    html[data-theme='dark'] .embed-header-url {
+        color: #777;
+    }
+
+    html[data-theme='dark'] .embed-header-link {
+        color: #777;
+    }
+
+    html[data-theme='dark'] .embed-iframe {
+        filter: invert(1) hue-rotate(180deg);
+    }
+}
+</style>
