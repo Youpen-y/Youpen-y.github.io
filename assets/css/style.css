@@ -1,15 +1,70 @@
+/* === Custom variables for code block header === */
+:root {
+  --code-header-bg: #2f3138;
+  --code-header-color: #9ea4aa;
+  --code-border-color: rgba(255,255,255,0.08);
+}
+
+html[data-theme='dark'] {
+  --code-header-bg: #161b22;
+  --code-header-color: #8b949e;
+  --code-border-color: rgba(255,255,255,0.08);
+}
+
+/* === Code block: card style === */
+.markdown-body .highlight {
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--code-border-color);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  position: relative;
+}
+
+/* Language label */
+.markdown-body .highlight::before {
+  content: attr(data-lang);
+  display: block;
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--code-header-color);
+  background: var(--code-header-bg);
+  border-bottom: 1px solid rgba(128,128,128,0.15);
+  letter-spacing: 1px;
+}
+
+.markdown-body .highlight pre {
+  display: block;
+  overflow: auto;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 20px 24px;
+  margin: 0;
+  word-wrap: normal;
+  white-space: pre;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: var(--code-bg) !important;
+  -o-tab-size: 4;
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+
+/* Standalone pre (without .highlight wrapper) */
 pre {
   display: block;
   overflow: auto;
-  font-size: 16px;
-  line-height: 24px;
-  /*padding: 12px 10px;*/
-	padding: 18px;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 20px 24px;
   margin: 16px 0;
   word-wrap: normal;
   white-space: pre;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid var(--code-border);
   background-color: var(--code-bg) !important;
   -o-tab-size: 4;
@@ -22,7 +77,7 @@ kbd,
 tt,
 samp {
   display: inline;
-  font-size: 16px;
+  font-size: 15px;
   padding: 2px 4px;
   border-radius: 3px;
   color: #1688f0;
@@ -223,10 +278,7 @@ table {
   outline: none;
 }
 
-.markdown-body .highlight {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
+
 
 .article-header {
   text-align: center;
@@ -314,4 +366,37 @@ nav ul li a:focus {
   .toc {
     display: none;
   }
+}
+
+/* === Code block: enhanced copy button === */
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #8b949e;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+pre:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #e6edf3;
+  border-color: rgba(255,255,255,0.2);
+}
+
+.copy-btn.copied {
+  background: rgba(63, 185, 80, 0.2);
+  color: #3fb950;
+  border-color: rgba(63, 185, 80, 0.3);
 }

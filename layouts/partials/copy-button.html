@@ -1,0 +1,55 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Pass data-lang to .highlight container for CSS ::before label
+    document.querySelectorAll('.highlight').forEach(function(el) {
+      var code = el.querySelector('code[data-lang]');
+      if (code) {
+        var lang = code.getAttribute('data-lang');
+        // Hugo defaults to 'en' when no language fence specified
+        if (lang === 'en' || lang === '' || lang === 'text' || lang === 'fallback') {
+          lang = 'TEXT';
+        }
+        el.setAttribute('data-lang', lang.toUpperCase());
+      }
+    });
+
+    const codeBlocks = document.querySelectorAll('pre code');
+
+    codeBlocks.forEach(function (codeBlock) {
+      const pre = codeBlock.parentElement;
+
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-btn';
+      copyButton.textContent = 'Copy';
+      copyButton.setAttribute('aria-label', 'Copy code to clipboard');
+
+      copyButton.addEventListener('click', async function () {
+        try {
+          await navigator.clipboard.writeText(codeBlock.textContent);
+          copyButton.textContent = 'Copied!';
+          copyButton.classList.add('copied');
+
+          setTimeout(function () {
+            copyButton.textContent = 'Copy';
+            copyButton.classList.remove('copied');
+          }, 2000);
+        } catch (err) {
+          copyButton.textContent = 'Failed';
+          setTimeout(function () {
+            copyButton.textContent = 'Copy';
+          }, 2000);
+        }
+      });
+
+      const updateButtonPosition = function() {
+        const scrollLeft = pre.scrollLeft;
+        copyButton.style.transform = `translateX(${scrollLeft}px)`;
+      };
+
+      pre.addEventListener('scroll', updateButtonPosition);
+
+      pre.style.position = 'relative';
+      pre.appendChild(copyButton);
+    });
+  });
+</script>
