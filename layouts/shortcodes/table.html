@@ -1,0 +1,40 @@
+{{- $cols := .Get "cols" -}}
+{{- $id := printf "tbl-%d" .Ordinal -}}
+
+{{- if $cols -}}
+{{- $raw := split $cols ":" -}}
+{{- $widths := slice -}}
+
+{{- /* If only one element, try comma-separated (legacy: "15%,30%,55%") */ -}}
+{{- if eq (len $raw) 1 -}}
+  {{- $widths = split (trim $cols " ") "," -}}
+{{- else -}}
+  {{- $total := 0 -}}
+  {{- range $raw -}}
+    {{- $total = add $total (int (trim . " ")) -}}
+  {{- end -}}
+  {{- range $raw -}}
+    {{- $pct := printf "%.4f%%" (div (float (trim . " ")) (float $total)) -}}
+    {{- $widths = $widths | append $pct -}}
+  {{- end -}}
+{{- end -}}
+
+<div id="{{ $id }}" class="table-wrapper">
+{{ .Inner | markdownify }}
+</div>
+<style>
+#{{ $id }} table {
+  table-layout: fixed;
+  display: table;
+  width: 100%;
+}
+{{- range $idx, $w := $widths }}
+#{{ $id }} table th:nth-child({{ add $idx 1 }}),
+#{{ $id }} table td:nth-child({{ add $idx 1 }}) {
+  width: {{ trim (printf "%s" $w) " " }};
+}
+{{- end }}
+</style>
+{{- else -}}
+{{ .Inner | markdownify }}
+{{- end -}}
