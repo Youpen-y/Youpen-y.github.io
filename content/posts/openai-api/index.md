@@ -318,7 +318,7 @@ Chat Completions API 取得了巨大的成功，成为事实上的行业标准�
 
 ### 小结
 
-从 Completions API 的文本补全，到 Chat Completions API 的结构化对话，再到 Responses API 的推理与行动循环的三代 API 的演进可以看出，大语言模型正从"工具"走向"智能体"。每一次 API 的重新设计，都紧跟模型能力的跃迁，将新的可能性以最自然的方式暴露给开发者。未来 API 是否会迎来进一步改变呢？还是开篇所引用的那句话：**API 设计始终以模型自身的工作原理为指导。**
+从 Completions API 的文本补全，到 Chat Completions API 的结构化对话，再到 Responses API 的推理与行动循环，这一系列 API 的演进表明，大语言模型的应用范式正从"工具"向"智能体"演进。每一次 API 的重新设计，都紧跟模型能力的跃迁，将新的可能性以最自然的方式暴露给开发者。未来 API 是否会迎来进一步改变呢？还是开篇所引用的那句话：**API 设计始终以模型自身的工作原理为指导。**
 
 ### 参考文章
 {{< embed url="https://x.com/athyuttamre/status/1899541474297180664" title="Introducing the Responses API: the new primitive of the OpenAI API." card="true">}}
