@@ -14,7 +14,7 @@
     {{- $total = add $total (int (trim . " ")) -}}
   {{- end -}}
   {{- range $raw -}}
-    {{- $pct := printf "%.4f%%" (div (float (trim . " ")) (float $total)) -}}
+    {{- $pct := printf "%.4f%%" (mul (div (float (trim . " ")) (float $total)) 100.0) -}}
     {{- $widths = $widths | append $pct -}}
   {{- end -}}
 {{- end -}}
