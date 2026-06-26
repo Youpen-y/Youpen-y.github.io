@@ -142,7 +142,7 @@ pre,
 tt,
 kbd,
 samp {
-  font-family: "Source Code Pro", Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: "Source Code Pro", Menlo, Consolas, "Liberation Mono", "Sarasa Mono SC", "Noto Sans Mono CJK SC", "DejaVu Sans Mono", monospace;
   font-weight: 400;
 }
 

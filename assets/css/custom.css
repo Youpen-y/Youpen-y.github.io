@@ -1,0 +1,26 @@
+/* === ASCII architecture diagrams ========================================
+   Rendered as raw <pre class="ascii-diagram"> to bypass Hugo's Chroma
+   wrapper (which injects `data-lang` labels, per-line `display:flex`
+   spans, and syntax highlighting — all undesirable for ASCII art).
+   Mirrors the look of `.markdown-body .highlight` code blocks. */
+
+pre.ascii-diagram {
+  margin: 16px 0 20px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  white-space: pre;
+  font-size: 13px;
+  line-height: 1.5;
+  border-radius: 12px;
+  border: 1px solid var(--code-border-color, var(--code-border, #e0e0e0));
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  background-color: var(--code-bg) !important;
+  color: #f8f8f2;
+  /* Monospace stack with CJK-equal-width fallbacks so box-drawing chars
+     and any inline CJK annotation stay aligned (CJK glyph = 2 × ASCII). */
+  font-family: "Source Code Pro", Menlo, Consolas, "Liberation Mono",
+    "Sarasa Mono SC", "Noto Sans Mono CJK SC", "DejaVu Sans Mono", monospace;
+  -o-tab-size: 4;
+  -moz-tab-size: 4;
+  tab-size: 4;
+}

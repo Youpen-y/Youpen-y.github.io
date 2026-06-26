@@ -1,0 +1,425 @@
+{{- /* Load xterm.js once per page (no backend needed). A Line Discipline is
+         simulated in front-end JS to faithfully demonstrate Canonical vs Raw. */ -}}
+{{- if not ($.Page.Scratch.Get "xtermLoaded") -}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.css">
+<script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
+<style>
+.term-demo {
+    margin: 1.4em 0;
+    border: 1px solid var(--term-border, #d8d8d8);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--term-bg, #ffffff);
+}
+.term-demo-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--term-border, #d8d8d8);
+    background: var(--term-bar, #f6f6f8);
+    flex-wrap: wrap;
+}
+.term-demo-switch {
+    display: inline-flex;
+    border: 1px solid var(--term-border, #d2d2d2);
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.term-demo-btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: inherit;
+    transition: background 0.15s, color 0.15s;
+    border-right: 1px solid var(--term-border, #d2d2d2);
+}
+.term-demo-btn:last-child { border-right: 0; }
+.term-demo-btn:hover { background: var(--term-hover, rgba(0,0,0,0.05)); }
+.term-demo-btn.is-active {
+    background: #2b8a3e;
+    color: #fff;
+}
+.term-demo-btn.is-active[data-mode="raw"] {
+    background: #8a2b8a;
+}
+.term-demo-hint {
+    flex: 1;
+    min-width: 200px;
+    font-size: 0.78rem;
+    color: var(--term-muted, #888);
+    line-height: 1.4;
+}
+.term-demo-terminal {
+    height: 360px;
+    padding: 6px 8px 8px;
+    background: var(--term-canvas, #ffffff);
+}
+.term-demo-terminal .xterm {
+    height: 100%;
+}
+/* Override xterm's hardcoded #000 viewport so the scrollbar track matches the theme */
+.term-demo-terminal .xterm .xterm-viewport {
+    background-color: var(--term-canvas, #ffffff) !important;
+}
+.term-demo-terminal .xterm-viewport::-webkit-scrollbar {
+    width: 8px;
+}
+.term-demo-terminal .xterm-viewport::-webkit-scrollbar-track {
+    background: transparent;
+}
+.term-demo-terminal .xterm-viewport::-webkit-scrollbar-thumb {
+    background: var(--term-scroll, #c4c4c4);
+    border-radius: 4px;
+}
+.term-demo-terminal .xterm-viewport::-webkit-scrollbar-thumb:hover {
+    background: var(--term-scroll-hover, #a8a8a8);
+}
+.term-demo-terminal .xterm-viewport {
+    scrollbar-width: thin;
+    scrollbar-color: var(--term-scroll, #c4c4c4) transparent;
+}
+.term-demo-fallback {
+    padding: 1.2em;
+    color: #888;
+    font-size: 0.85rem;
+}
+html[data-theme='dark'] {
+    --term-border: #3a3a44;
+    --term-bg: #14141b;
+    --term-bar: #1d1d26;
+    --term-hover: rgba(255,255,255,0.06);
+    --term-muted: #8a8a96;
+    --term-canvas: #14141b;
+    --term-scroll: #3a3a44;
+    --term-scroll-hover: #52525e;
+}
+</style>
+<script>
+function __termDemoTheme() {
+    var dark = document.documentElement.dataset.theme === 'dark';
+    return dark ? {
+        background: '#14141b', foreground: '#e6e6ef', cursor: '#e6e6ef',
+        selectionBackground: '#3a3a4a', selectionForeground: '#ffffff',
+        black: '#1d1d26', red: '#ff6b6b', green: '#51cf66', yellow: '#ffd43b',
+        blue: '#74c0fc', magenta: '#cc8eff', cyan: '#66d9e8', white: '#e6e6ef',
+        brightBlack: '#5c5c66', brightRed: '#ffa8a8', brightGreen: '#8ce99a',
+        brightYellow: '#ffe066', brightBlue: '#a5d8ff', brightMagenta: '#e599f7',
+        brightCyan: '#99e9f2', brightWhite: '#ffffff'
+    } : {
+        background: '#ffffff', foreground: '#1f2330', cursor: '#1f2330',
+        selectionBackground: '#cdd5ff', selectionForeground: '#1f2330',
+        black: '#1f2330', red: '#e03131', green: '#2f9e44', yellow: '#f08c00',
+        blue: '#1971c2', magenta: '#ae3ec9', cyan: '#0c8599', white: '#ffffff',
+        brightBlack: '#868e96', brightRed: '#fa5252', brightGreen: '#40c057',
+        brightYellow: '#fab005', brightBlue: '#228be6', brightMagenta: '#cc5de8',
+        brightCyan: '#15aabf', brightWhite: '#1f2330'
+    };
+}
+function __termDemoMount(container) {
+    var termEl = container.querySelector('.term-demo-terminal');
+    if (typeof Terminal === 'undefined') {
+        termEl.innerHTML = '<p class="term-demo-fallback">Failed to load xterm.js. Please refresh the page.</p>';
+        return;
+    }
+    var term = new Terminal({
+        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace',
+        fontSize: 13,
+        cursorBlink: true,
+        convertEol: false,
+        theme: __termDemoTheme()
+    });
+    var fit = new FitAddon.FitAddon();
+    term.loadAddon(fit);
+    term.open(termEl);
+    try { fit.fit(); } catch (e) {}
+
+    var PROMPT = '\x1b[1;32m\u279c\x1b[0m \x1b[1;36m~/playground\x1b[0m ';
+    var WELCOME =
+        '\x1b[1;36m\u258c Canonical Mode\x1b[0m\r\n' +
+        '\x1b[2mSimulated shell: keystrokes go through the kernel Line Discipline first \u2014 echo / line editing / line buffering.\x1b[0m\r\n' +
+        '\x1b[2mTip: type help for commands; run ping then press Ctrl+C to feel SIGINT.\x1b[0m\r\n\r\n';
+
+    function rp(s, n) { var r = ''; for (var i = 0; i < n; i++) r += s; return r; }
+
+    var state = {
+        mode: 'canonical',
+        canon: { input: '', running: false, timer: null, seq: 0 },
+        raw: { row: 3, col: 2, lastKey: '', lastByte: '' }
+    };
+
+    function setHint(t) { var h = container.querySelector('.term-demo-hint'); if (h) h.textContent = t; }
+    function printPrompt() { term.write(PROMPT); }
+
+    function endPing() {
+        if (state.canon.timer) { clearInterval(state.canon.timer); state.canon.timer = null; }
+        state.canon.running = false;
+        printPrompt();
+    }
+    function startPing() {
+        state.canon.running = true;
+        state.canon.seq = 0;
+        term.writeln('\x1b[2mPING 127.0.0.1 (127.0.0.1): 56 data bytes\x1b[0m');
+        state.canon.timer = setInterval(function () {
+            state.canon.seq++;
+            term.writeln('\x1b[1;34m64 bytes from 127.0.0.1:\x1b[0m icmp_seq=' + state.canon.seq +
+                ' ttl=64 time=' + (Math.random() * 0.5 + 0.1).toFixed(3) + ' ms');
+            if (state.canon.seq >= 20) endPing();
+        }, 380);
+    }
+
+    function runCommand(line) {
+        var parts = line.trim().split(/\s+/);
+        var cmd = parts[0];
+        var args = parts.slice(1).join(' ');
+        switch (cmd) {
+            case '':
+                break;
+            case 'help':
+                term.writeln('\x1b[1mAvailable commands\x1b[0m');
+                term.writeln('  help            show this help');
+                term.writeln('  echo <text>     echo text back');
+                term.writeln('  date            show current time');
+                term.writeln('  whoami          show current user');
+                term.writeln('  pwd             show current directory');
+                term.writeln('  ls              list files');
+                term.writeln('  cat <file>      view a file (try cat readme.txt)');
+                term.writeln('  ping            continuous output (Ctrl+C interrupts \u2192 SIGINT)');
+                term.writeln('  clear           clear the screen');
+                break;
+            case 'echo':
+                term.writeln(args);
+                break;
+            case 'date':
+                term.writeln(new Date().toString());
+                break;
+            case 'whoami':
+                term.writeln('guest');
+                break;
+            case 'pwd':
+                term.writeln('/home/guest/playground');
+                break;
+            case 'ls':
+                term.writeln('\x1b[1;34msrc\x1b[0m  \x1b[1;34mnotes\x1b[0m  \x1b[33mreadme.txt\x1b[0m  \x1b[32mrun.sh\x1b[0m');
+                break;
+            case 'cat':
+                if (args === 'readme.txt') {
+                    term.writeln('\x1b[1mreadme.txt\x1b[0m');
+                    term.writeln('\x1b[2m' + rp('\u2500', 24) + '\x1b[0m');
+                    term.writeln('A virtual terminal simulated by xterm.js in the browser.');
+                    term.writeln('Currently in Canonical mode: each character you type first');
+                    term.writeln('passes through the kernel Line Discipline (echo, line');
+                    term.writeln('editing, line buffering). Only after Enter is the whole');
+                    term.writeln('line handed to this simulated shell.');
+                } else if (args === '') {
+                    term.writeln('usage: cat <file>  (try cat readme.txt)');
+                } else {
+                    term.writeln('cat: ' + args + ': No such file or directory');
+                }
+                break;
+            case 'ping':
+                startPing();
+                break;
+            case 'clear':
+                term.clear();
+                break;
+            case 'exit':
+            case 'logout':
+                term.writeln('\x1b[2m(use the toggle above to switch to Raw mode)\x1b[0m');
+                break;
+            default:
+                term.writeln('zsh: command not found: ' + cmd);
+        }
+        if (!state.canon.running) printPrompt();
+    }
+
+    function canonData(d) {
+        if (state.canon.running) {
+            if (d === '\x03') {
+                if (state.canon.timer) { clearInterval(state.canon.timer); state.canon.timer = null; }
+                state.canon.running = false;
+                term.write('^C\r\n');
+                printPrompt();
+            }
+            return;
+        }
+        switch (d) {
+            case '\r':
+            case '\n':
+                term.write('\r\n');
+                runCommand(state.canon.input);
+                state.canon.input = '';
+                break;
+            case '\x7f':
+            case '\b':
+                if (state.canon.input.length > 0) {
+                    state.canon.input = state.canon.input.slice(0, -1);
+                    term.write('\b \b');
+                }
+                break;
+            case '\x15':
+                term.write(rp('\b \b', state.canon.input.length));
+                state.canon.input = '';
+                break;
+            case '\x17': {
+                var s = state.canon.input.replace(/\s+$/, '').replace(/[^\s]+$/, '');
+                term.write(rp('\b \b', state.canon.input.length - s.length));
+                state.canon.input = s;
+                break;
+            }
+            case '\x03':
+                term.write('^C\r\n');
+                state.canon.input = '';
+                printPrompt();
+                break;
+            case '\x1a':
+                term.write('^Z\r\n\x1b[2m[1]+  Stopped\x1b[0m\r\n');
+                state.canon.input = '';
+                printPrompt();
+                break;
+            default:
+                if (d.charCodeAt(0) >= 0x20 && d.charCodeAt(0) !== 0x7f && d.charCodeAt(0) < 0x80 && d.length === 1) {
+                    state.canon.input += d;
+                    term.write(d);
+                } else if (d.charCodeAt(0) >= 0x80 && d.length === 1) {
+                    state.canon.input += d;
+                    term.write(d);
+                }
+        }
+    }
+
+    function keyLabel() {
+        if (!state.raw.lastKey) return '\x1b[2m(no key yet, press any key)\x1b[0m';
+        return '\x1b[1m' + state.raw.lastKey + '\x1b[0m  \x1b[2m(' + state.raw.lastByte + ')\x1b[0m';
+    }
+    function drawRaw() {
+        var R = term.rows, C = term.cols;
+        term.write('\x1b[2J\x1b[H\x1b[?25l');
+        term.write('\x1b[1;1H\x1b[1;35m\u258c RAW MODE\x1b[0m \x1b[2mapp renders \u00b7 no echo \u00b7 no buffering \u00b7 Ctrl+C sends no signal\x1b[0m');
+        term.write('\x1b[2;1H\x1b[2m' + rp('\u2500', C) + '\x1b[0m');
+        term.write('\x1b[' + state.raw.row + ';' + state.raw.col + 'H\x1b[1;33m@\x1b[0m');
+        term.write('\x1b[' + (R - 3) + ';1H\x1b[2m' + rp('\u2500', C) + '\x1b[0m');
+        term.write('\x1b[' + (R - 2) + ';1H last key: ' + keyLabel());
+        term.write('\x1b[' + (R - 1) + ';1H\x1b[2m move: hjkl / \u2190\u2191\u2193\u2192   exit: q   (Ctrl+C = byte 0x03)\x1b[0m');
+    }
+
+    function recordRaw(key, cp, byteStr) {
+        state.raw.lastKey = key;
+        state.raw.lastByte = byteStr || ('0x' + cp.toString(16).toUpperCase().padStart(2, '0'));
+        var R = term.rows, C = term.cols;
+        if (state.raw.row < 3) state.raw.row = 3;
+        if (state.raw.row > R - 4) state.raw.row = R - 4;
+        if (state.raw.col < 2) state.raw.col = 2;
+        if (state.raw.col > C - 1) state.raw.col = C - 1;
+        drawRaw();
+    }
+    function rawData(d) {
+        var cp = d.charCodeAt(0);
+        switch (d) {
+            case '\x1b[A': state.raw.row--; recordRaw('\u2191 up', cp, 'ESC [ A'); return;
+            case '\x1b[B': state.raw.row++; recordRaw('\u2193 down', cp, 'ESC [ B'); return;
+            case '\x1b[C': state.raw.col++; recordRaw('\u2192 right', cp, 'ESC [ C'); return;
+            case '\x1b[D': state.raw.col--; recordRaw('\u2190 left', cp, 'ESC [ D'); return;
+            case 'k': state.raw.row--; recordRaw('k', cp); return;
+            case 'j': state.raw.row++; recordRaw('j', cp); return;
+            case 'l': state.raw.col++; recordRaw('l', cp); return;
+            case 'h': state.raw.col--; recordRaw('h', cp); return;
+            case 'q': switchMode('canonical'); return;
+        }
+        if (cp < 0x20 && d.length === 1) {
+            var name = (d === '\x03') ? 'Ctrl+C' : (d === '\x1a' ? 'Ctrl+Z' : 'Ctrl+' + String.fromCharCode(cp + 64));
+            recordRaw(name, cp);
+            return;
+        }
+        if (cp >= 0x20 && cp < 0x7f && d.length === 1) { recordRaw(d, cp); return; }
+        if (cp >= 0x80 && d.length === 1) { recordRaw(d, cp); return; }
+    }
+
+    function switchMode(mode) {
+        if (state.canon.timer) { clearInterval(state.canon.timer); state.canon.timer = null; }
+        state.canon.running = false;
+        state.mode = mode;
+        container.__mode = mode;
+        container.querySelectorAll('.term-demo-btn').forEach(function (b) {
+            b.classList.toggle('is-active', b.dataset.mode === mode);
+        });
+        if (mode === 'canonical') {
+            term.options.cursorBlink = true;
+            term.write('\x1b[?25h');
+            term.reset();
+            term.write(WELCOME);
+            state.canon.input = '';
+            printPrompt();
+            setHint('');
+        } else {
+            term.write('\x1b[?25l');
+            term.reset();
+            state.raw.row = Math.max(3, Math.floor(term.rows / 2));
+            state.raw.col = Math.max(2, Math.floor(term.cols / 2));
+            state.raw.lastKey = '';
+            state.raw.lastByte = '';
+            drawRaw();
+            setHint('');
+        }
+    }
+
+    container.querySelectorAll('.term-demo-btn').forEach(function (b) {
+        b.addEventListener('click', function () { switchMode(b.dataset.mode); });
+    });
+    term.onData(function (d) {
+        if (state.mode === 'canonical') canonData(d); else rawData(d);
+    });
+
+    var rt;
+    window.addEventListener('resize', function () {
+        clearTimeout(rt);
+        rt = setTimeout(function () { try { fit.fit(); } catch (e) {} if (state.mode === 'raw') drawRaw(); }, 80);
+    });
+
+    container.__term = term;
+    container.__drawRaw = drawRaw;
+    container.__mode = 'canonical';
+    switchMode('canonical');
+}
+
+function __termDemoKick() {
+    document.querySelectorAll('.term-demo:not([data-mounted])').forEach(function (c) {
+        try { __termDemoMount(c); } catch (e) { if (window.console) console.warn('term-demo init error:', e); }
+        c.setAttribute('data-mounted', '1');
+    });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', __termDemoKick);
+else __termDemoKick();
+window.addEventListener('load', __termDemoKick);
+
+/* Update terminal colors on theme toggle */
+new MutationObserver(function () {
+    document.querySelectorAll('.term-demo[data-mounted]').forEach(function (c) {
+        if (c.__term) {
+            c.__term.options.theme = __termDemoTheme();
+            c.__term.refresh(0, c.__term.rows - 1);
+            if (c.__mode === 'raw' && typeof c.__drawRaw === 'function') c.__drawRaw();
+        }
+    });
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+</script>
+{{- $.Page.Scratch.Set "xtermLoaded" true -}}
+{{- end -}}
+
+{{- /* Each call emits an independent instance (HTML only; scripts injected above) */ -}}
+<div class="term-demo">
+    <div class="term-demo-toolbar">
+        <div class="term-demo-switch" role="tablist" aria-label="Terminal mode switch">
+            <button class="term-demo-btn is-active" data-mode="canonical" type="button">Canonical</button>
+            <button class="term-demo-btn" data-mode="raw" type="button">Raw</button>
+        </div>
+        <div class="term-demo-hint"></div>
+    </div>
+    <div class="term-demo-terminal"></div>
+</div>
