@@ -34,6 +34,9 @@ summaryLength = 120
 [params.assets]
 	css = ["css/fonts.css", "css/custom.css"]
 
+[params.syntax]
+	use = "gpu"
+
 [params.global_comments]
   enable = true
   comment_system = "giscus" # utterances
@@ -84,10 +87,13 @@ summaryLength = 120
   url = "/about/"
 
 # Chroma highlight
+# noClasses=false: emit colorless class markup; gpu-lexer (params.syntax.use="gpu")
+# recolors code blocks client-side at runtime. Flip noClasses back to true
+# (and remove params.syntax) to restore build-time Chroma colors.
 [markup.highlight]
   codeFences = true
   guessSyntax = true
-  noClasses = true
+  noClasses = false
   style = "dracula"
 #  style = "github"
 

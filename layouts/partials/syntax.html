@@ -1,0 +1,40 @@
+{{- /* Client-side syntax highlighting via gpu-lexer (WebGPU, language-agnostic).
+       Build-time Chroma markup stays colorless (noClasses = false) and this
+       loader recolors every code block at runtime. Without WebGPU the code
+       remains plain text. Vendored dist is already minified — only
+       fingerprint it, do NOT run Hugo's JS minifier over the WGSL payload. */ -}}
+{{- with .Site.Params.syntax -}}
+{{- if eq (.use | lower) "gpu" -}}
+{{- $lexer := resources.Get "js/gpu-lexer.js" | resources.Fingerprint "sha384" -}}
+<script type="module">
+  const run = async () => {
+    if (!navigator.gpu) {
+      console.info('[gpu-lexer] WebGPU unavailable, code stays plain');
+      return;
+    }
+    const { parse } = await import('{{ $lexer.RelPermalink }}');
+    const esc = (s) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const blocks = document.querySelectorAll('.highlight pre code');
+    for (const el of blocks) {
+      try {
+        const src = el.textContent;
+        const spans = await parse(src);
+        let html = '';
+        let pos = 0;
+        for (const sp of spans) {
+          if (sp.start > pos) html += esc(src.slice(pos, sp.start));
+          html += '<span class="gl-' + sp.type + '">' + esc(src.slice(sp.start, sp.end)) + '</span>';
+          pos = sp.end;
+        }
+        html += esc(src.slice(pos));
+        el.innerHTML = html;
+      } catch (err) {
+        console.warn('[gpu-lexer] block skipped:', err && err.message);
+      }
+    }
+  };
+  run();
+</script>
+{{- end -}}
+{{- end -}}

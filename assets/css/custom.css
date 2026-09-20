@@ -26,6 +26,26 @@
   text-align: left;
 }
 
+/* === gpu-lexer (client-side WebGPU highlighting) ============================
+   Chroma no longer emits inline colors (noClasses = false); these palette
+   rules recolor code blocks after gpu-lexer replaces their content.
+   Classes match gpu-lexer's SyntaxClassName union. Dracula palette. */
+
+.markdown-body .highlight pre,
+.markdown-body .highlight pre code {
+  color: #f8f8f2;
+}
+
+.markdown-body .highlight pre code .gl-comment  { color: #6272a4; }
+.markdown-body .highlight pre code .gl-string   { color: #f1fa8c; }
+.markdown-body .highlight pre code .gl-number   { color: #bd93f9; }
+.markdown-body .highlight pre code .gl-keyword  { color: #ff79c6; }
+.markdown-body .highlight pre code .gl-type     { color: #8be9fd; }
+.markdown-body .highlight pre code .gl-function { color: #50fa7b; }
+.markdown-body .highlight pre code .gl-constant { color: #ffb86c; }
+.markdown-body .highlight pre code .gl-operator { color: #f8f8f2; }
+.markdown-body .highlight pre code .gl-plain    { color: #f8f8f2; }
+
 /* === ASCII architecture diagrams ========================================
    Rendered as raw <pre class="ascii-diagram"> to bypass Hugo's Chroma
    wrapper (which injects `data-lang` labels, per-line `display:flex`
