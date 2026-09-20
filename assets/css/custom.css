@@ -19,6 +19,13 @@
   width: revert;
 }
 
+/* Left-align headers like body cells (UA default centers <th>). Explicit
+   per-column alignment from markdown (`|:---|`) emits inline styles and
+   still wins. */
+.markdown-body table th {
+  text-align: left;
+}
+
 /* === ASCII architecture diagrams ========================================
    Rendered as raw <pre class="ascii-diagram"> to bypass Hugo's Chroma
    wrapper (which injects `data-lang` labels, per-line `display:flex`
