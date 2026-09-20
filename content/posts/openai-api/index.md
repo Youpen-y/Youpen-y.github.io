@@ -14,27 +14,27 @@ comments: true
 2020年6月11日，OpenAI 宣布推出用于访问 GPT-3 系列模型的 Completions API（`/v1/completions`）。用户只需提供提示词与参数，模型便会返回相应的文本补全（completion）。两年后的7月份，该 API 在迎来最后一次更新后，便逐步退出历史舞台。回顾这一 API，有助于我们认识当时的设计考量。
 
 下面是API的Body Parameters：
-{{% table cols="1.9:2:0.5:1.5:3:2.5" %}}
-| 参数名 | 类型 | 是否必选 | 候选项 | 含义 | 注意点 |
-|---|---|---|---|---|---|
-| `model` | string | 是 | "gpt-3.5-turbo-instruct" / "davinci-002" / "babbage-002" | 指定使用的模型 | - |
-| `prompt` | string/array of string/array of number/array of array of number | 是 | 自定义 | 用户定义的用于生成完整内容的提示词 | - |
-| `best_of` | number | 否 | [0, 20] | 指定在服务器端生成补全的数目，从中返回“最优”（每 token 对数概率最高）的结果。| 结果不会流式输出；大值很费 token |
-| `echo` | boolean | 否 | true/false | 除了补全，同时返回提示词 | - |
-| `frequency_penalty` | number | 否 | [-2.0, 2.0] | 正数值会根据新生成的 token 在文本中出现的频率来对其施加惩罚，从而降低模型逐字重复相同内容的可能性。 | - |
-| `logit_bias` | map[number] | 否 | JSON object {"token_id": value} | 调整特定符号在补全结果中出现的概率 | value 的范围: [-100, 100]，设置为 -100 则阻止生成 |
-| `logprobs` | number | 否 | [0, 5] | 同时列出最有可能出现的 logprobs 个输出 token 的日志概率，以及被选中的 token | 如果 logprobs 的值为 5，那么 API 将返回 5 个最有可能出现的 token。API 总会返回 logprob 个被抽中的 token，因此响应结果中最多可能包含 logprobs+1 个元素。|
-| `max_tokens` | number | 否 | [0, 模型上限] | 补全中生成的 token 上限 |（提示词 token 数 + max_tokens）<= 模型处理上限 |
-| `n` | number | 否 | [1, 128] | 每个提示词需要生成的补全数量 | 大 n 费 token |
-| `presence_penalty` | number | 否 | [-2.0, 2.0] | 设为正数值会根据新生成的 token 在文本中出现的频率来对其施加“惩罚”，从而增加模型讨论新主题的可能性。| - |
-| `seed` | number | 否 | int64 | 指定后，系统会尽力以确定性方式来处理请求。 | 确定性并不具有绝对的保障，通过 `system_fingerprint` 响应参数来了解后端发生的各种变化。|
-| `stop` | string/array of string | 否 | - | 遇到任一停止序列后，停止生成更多 token | 返回文本中不包含这些停止序列 |
-| `stream` | boolean | 否 | true/false | 是否流式传输响应 | - |
-| `stream_options` | object | 否 | - | 流式响应的选项 | 仅在 stream: true 时有效，设置 `{"include_usage": true}` 获取使用统计 |
-| `suffix` | string | 否 | - | 在插入文本后添加的后缀 | 参数仅适用于 `gpt-3.5-turbo-instruct` 模型 | 
-| `temperature` | number | 否 | [0, 2] | 采样温度 | 较高的数值，比如 0.8，会使输出结果更加随机；而较低的数值，比如 0.2，则会使输出结果更加有规律、更易于预测。 |
-| `top_p` | number | 否 | [0, 1] | 核心采样：只考虑高概率值的 tokens | top_p: 0.1 意味着只考虑概率值前 10% 的 tokens |
-| `user` | string | 否 | id | 标识终端用户的唯一标识符 | 帮助 OpenAI 监控和识别各种滥用行为 |
+{{% table cols="1.6:1.3:0.6:1.7:4.8" %}}
+| 参数名 | 类型 | 是否必选 | 候选项 | 含义 / 注意点 |
+| --- | --- | --- | --- | --- |
+| `model` | string | 是 | "gpt-3.5-turbo-instruct" / "davinci-002" / "babbage-002" | 指定使用的模型 |
+| `prompt` | string/array of string/array of number/array of array of number | 是 | 自定义 | 用户定义的用于生成完整内容的提示词 |
+| `best_of` | number | 否 | [0, 20] | 指定在服务器端生成补全的数目，从中返回“最优”（每 token 对数概率最高）的结果。<br>**注**：结果不会流式输出；大值很费 token |
+| `echo` | boolean | 否 | true/false | 除了补全，同时返回提示词 |
+| `frequency_penalty` | number | 否 | [-2.0, 2.0] | 正数值会根据新生成的 token 在文本中出现的频率来对其施加惩罚，从而降低模型逐字重复相同内容的可能性。 |
+| `logit_bias` | map[number] | 否 | JSON object {"token_id": value} | 调整特定符号在补全结果中出现的概率<br>**注**：value 的范围: [-100, 100]，设置为 -100 则阻止生成 |
+| `logprobs` | number | 否 | [0, 5] | 同时列出最有可能出现的 logprobs 个输出 token 的日志概率，以及被选中的 token<br>**注**：如果 logprobs 的值为 5，那么 API 将返回 5 个最有可能出现的 token。API 总会返回 logprob 个被抽中的 token，因此响应结果中最多可能包含 logprobs+1 个元素。 |
+| `max_tokens` | number | 否 | [0, 模型上限] | 补全中生成的 token 上限<br>**注**：（提示词 token 数 + max_tokens）<= 模型处理上限 |
+| `n` | number | 否 | [1, 128] | 每个提示词需要生成的补全数量<br>**注**：大 n 费 token |
+| `presence_penalty` | number | 否 | [-2.0, 2.0] | 设为正数值会根据新生成的 token 在文本中出现的频率来对其施加“惩罚”，从而增加模型讨论新主题的可能性。 |
+| `seed` | number | 否 | int64 | 指定后，系统会尽力以确定性方式来处理请求。<br>**注**：确定性并不具有绝对的保障，通过 `system_fingerprint` 响应参数来了解后端发生的各种变化。 |
+| `stop` | string/array of string | 否 | - | 遇到任一停止序列后，停止生成更多 token<br>**注**：返回文本中不包含这些停止序列 |
+| `stream` | boolean | 否 | true/false | 是否流式传输响应 |
+| `stream_options` | object | 否 | - | 流式响应的选项<br>**注**：仅在 stream: true 时有效，设置 `{"include_usage": true}` 获取使用统计 |
+| `suffix` | string | 否 | - | 在插入文本后添加的后缀<br>**注**：参数仅适用于 `gpt-3.5-turbo-instruct` 模型 |
+| `temperature` | number | 否 | [0, 2] | 采样温度<br>**注**：较高的数值，比如 0.8，会使输出结果更加随机；而较低的数值，比如 0.2，则会使输出结果更加有规律、更易于预测。 |
+| `top_p` | number | 否 | [0, 1] | 核心采样：只考虑高概率值的 tokens<br>**注**：top_p: 0.1 意味着只考虑概率值前 10% 的 tokens |
+| `user` | string | 否 | id | 标识终端用户的唯一标识符<br>**注**：帮助 OpenAI 监控和识别各种滥用行为 |
 {{% /table %}}
 
 端点响应如下（无论是流式还是非流式，结构相同）：
@@ -85,37 +85,37 @@ Chat Completions API 与 Completions API 最大的区别在于，使用结构化
 
 下面是 API 的核心 Body Parameters（参数支持因模型而异）：
 
-{{% table cols="1.9:2:0.5:1.5:3:2.5" %}}
-| 参数名 | 类型 | 是否必选 | 候选项 | 含义 | 注意点 |
-|---|---|---|---|---|---|
-| `model` | string | 是 | "gpt-4o" / "gpt-4.1" / "o3" 等 | 指定使用的模型 | 文本生成、视觉、语音 |
-| `messages` | array of object | 是 | 自定义 | 对话消息列表，每条包含 `role` 和 `content` | 支持多模态内容（文本 + 图片） |
-| `max_tokens` | number | 否 | [1, 模型上限] | 生成的 token 上限 | 弃用状态，部分新模型已改用 `max_completion_tokens` |
-| `max_completion_tokens` | number | 否 | [1, 模型上限] | 生成的 token 上限（含推理 token） | 包括可见的输出 tokens 和推理 tokens |
-| `modalities` | array | 否 | array of "text"/"audio" | 希望模型输出的类型 | 默认为 `["text"]` |
-| `temperature` | number | 否 | [0, 2] | 采样温度 | 较高值使输出更随机，较低值更确定 |
-| `top_p` | number | 否 | [0, 1] | 核心采样，仅考虑概率排名前 p 的 token | 与 `temperature` 二选一调整即可 |
-| `n` | number | 否 | [1, 128] | 为每条消息生成的回复数量 | 大 n 费 token |
-| `stream` | boolean | 否 | true/false | 是否流式传输响应 | - |
-| `stop` | string / array of string | 否 | 最多设置 4 个序列 | 输出遇到停止序列后停止生成 | 返回文本中不包含停止序列 |
-| `store` | boolean | 否 | true/false | 是否存储此请求的输出 | 用于提供模型蒸馏服务 |
-| `prediction` | object | 否 | - | 静态预测输出内容 | |
-| `presence_penalty` | number | 否 | [-2.0, 2.0] | 正值惩罚已出现的 token，增加讨论新主题的可能 | - |
-| `prompt_cache_key` | string | 否 | - | 缓存类似请求的响应，以优化缓存命中率 | 取代 `user` 字段 |
-| `prompt_cache_retention` | string | 否 | "in_memory" 或 "24h" | 提示缓存的保存策略 | - |
-| `reasoning_effort` | string | 否 | "none"/"minimal"/"low"/"medium"/"high"/"xhigh" | 限制推理模型的推理强度 | 减少推理强度可加快响应速度，减少响应中用于推理的 tokens |
-| `response_format` | object | 否 | JSON Schema | 指定输出格式（如 JSON 模式） | 可配合 Structured Outputs 使用 |
-| `safety_identifier` | string | 否 | 最长64个字符 | 唯一标识每个用户的字符串 | 帮助检测可能违反 OpenAI 使用政策的应用用户 |
-| `frequency_penalty` | number | 否 | [-2.0, 2.0] | 正值根据频率惩罚 token，降低逐字重复的可能 | - |
-| `logit_bias` | map[number] | 否 | {"token_id": value} | 调整特定 token 出现的概率 | value 范围 [-100, 100]；-100 阻止生成 |
-| `logprobs` | boolean | 否 | true/false | 是否返回输出 token 的日志概率 | - |
-| `top_logprobs` | number | 否 | [0, 20] | 每个位置返回概率最高的 N 个 token | 需 `logprobs: true` |
-| `tools` | array of object | 否 | - | 模型可调用的工具列表 | 函数调用（Function Calling）核心参数 |
-| `tool_choice` | string / object | 否 | "auto" / "required" / "none" | 控制模型如何选择工具调用 | 可指定具体函数名 |
-| `parallel_tool_calls` | boolean | 否 | true/false | 是否允许并行调用多个工具 | - |
-| `stream_options` | object | 否 | - | 流式响应选项 | 设置 `{"include_usage": true}` 获取使用统计 |
-| `verbosity` | string | 否 | "low"/"medium"/"high" | 限制模型响应的详细程度 | 值越低，响应越简洁；值越高，响应越详细 |
-| `web_search_options` | object | 否 | - | 网络搜索选项 | 搜索上下文大小与用户位置 |
+{{% table cols="1.6:1.3:0.6:1.7:4.8" %}}
+| 参数名 | 类型 | 是否必选 | 候选项 | 含义 / 注意点 |
+| --- | --- | --- | --- | --- |
+| `model` | string | 是 | "gpt-4o" / "gpt-4.1" / "o3" 等 | 指定使用的模型<br>**注**：文本生成、视觉、语音 |
+| `messages` | array of object | 是 | 自定义 | 对话消息列表，每条包含 `role` 和 `content`<br>**注**：支持多模态内容（文本 + 图片） |
+| `max_tokens` | number | 否 | [1, 模型上限] | 生成的 token 上限<br>**注**：弃用状态，部分新模型已改用 `max_completion_tokens` |
+| `max_completion_tokens` | number | 否 | [1, 模型上限] | 生成的 token 上限（含推理 token）<br>**注**：包括可见的输出 tokens 和推理 tokens |
+| `modalities` | array | 否 | array of "text"/"audio" | 希望模型输出的类型<br>**注**：默认为 `["text"]` |
+| `temperature` | number | 否 | [0, 2] | 采样温度<br>**注**：较高值使输出更随机，较低值更确定 |
+| `top_p` | number | 否 | [0, 1] | 核心采样，仅考虑概率排名前 p 的 token<br>**注**：与 `temperature` 二选一调整即可 |
+| `n` | number | 否 | [1, 128] | 为每条消息生成的回复数量<br>**注**：大 n 费 token |
+| `stream` | boolean | 否 | true/false | 是否流式传输响应 |
+| `stop` | string / array of string | 否 | 最多设置 4 个序列 | 输出遇到停止序列后停止生成<br>**注**：返回文本中不包含停止序列 |
+| `store` | boolean | 否 | true/false | 是否存储此请求的输出<br>**注**：用于提供模型蒸馏服务 |
+| `prediction` | object | 否 | - | 静态预测输出内容 |
+| `presence_penalty` | number | 否 | [-2.0, 2.0] | 正值惩罚已出现的 token，增加讨论新主题的可能 |
+| `prompt_cache_key` | string | 否 | - | 缓存类似请求的响应，以优化缓存命中率<br>**注**：取代 `user` 字段 |
+| `prompt_cache_retention` | string | 否 | "in_memory" 或 "24h" | 提示缓存的保存策略 |
+| `reasoning_effort` | string | 否 | "none"/"minimal"/"low"/"medium"/"high"/"xhigh" | 限制推理模型的推理强度<br>**注**：减少推理强度可加快响应速度，减少响应中用于推理的 tokens |
+| `response_format` | object | 否 | JSON Schema | 指定输出格式（如 JSON 模式）<br>**注**：可配合 Structured Outputs 使用 |
+| `safety_identifier` | string | 否 | 最长64个字符 | 唯一标识每个用户的字符串<br>**注**：帮助检测可能违反 OpenAI 使用政策的应用用户 |
+| `frequency_penalty` | number | 否 | [-2.0, 2.0] | 正值根据频率惩罚 token，降低逐字重复的可能 |
+| `logit_bias` | map[number] | 否 | {"token_id": value} | 调整特定 token 出现的概率<br>**注**：value 范围 [-100, 100]；-100 阻止生成 |
+| `logprobs` | boolean | 否 | true/false | 是否返回输出 token 的日志概率 |
+| `top_logprobs` | number | 否 | [0, 20] | 每个位置返回概率最高的 N 个 token<br>**注**：需 `logprobs: true` |
+| `tools` | array of object | 否 | - | 模型可调用的工具列表<br>**注**：函数调用（Function Calling）核心参数 |
+| `tool_choice` | string / object | 否 | "auto" / "required" / "none" | 控制模型如何选择工具调用<br>**注**：可指定具体函数名 |
+| `parallel_tool_calls` | boolean | 否 | true/false | 是否允许并行调用多个工具 |
+| `stream_options` | object | 否 | - | 流式响应选项<br>**注**：设置 `{"include_usage": true}` 获取使用统计 |
+| `verbosity` | string | 否 | "low"/"medium"/"high" | 限制模型响应的详细程度<br>**注**：值越低，响应越简洁；值越高，响应越详细 |
+| `web_search_options` | object | 否 | - | 网络搜索选项<br>**注**：搜索上下文大小与用户位置 |
 {{% /table %}}
 
 **messages** 中每条消息的核心字段：
@@ -203,27 +203,27 @@ Chat Completions API 取得了巨大的成功，成为事实上的行业标准�
 
 下面是 API 的核心 Body Parameters（参数支持因模型而异）：
 
-{{% table cols="1.9:2:0.5:1.5:3:2.5" %}}
-| 参数名 | 类型 | 是否必选 | 候选项 | 含义 | 注意点 |
-|---|---|---|---|---|---|
-| `model` | string | 是 | "gpt-5.5" / "gpt-4o" / "o3" 等 | 指定使用的模型 | - |
-| `input` | string / array of object | 是 | 自定义 | 输入内容，文本字符串或结构化输入项列表 | 支持多模态（文本 + 图片 + 文件） |
-| `instructions` | string | 否 | 自定义 | 系统级指令，定义模型的行为方式 | 替代 Chat Completions 中的 system 消息 |
-| `tools` | array of object | 否 | - | 模型可使用的工具列表 | 内置：web_search、file_search、code_interpreter、mcp；自定义：function |
-| `tool_choice` | string / object | 否 | "auto" / "required" / "none" | 控制模型如何选择工具 | 可指定具体工具名称 |
-| `max_output_tokens` | number | 否 | [16, 模型上限] | 响应中可生成的 token 上限（包括可见输出 token 和推理 token） | - |
-| `max_tool_calls` | number | 否 | - | 限制模型在一次响应中可触发内置工具调用数目的最大限制 | 超过限制的工具调用请求将被忽略 |
-| `parallel_tool_calls` | boolean | 否 | - | 是否允许模型并行运行工具调用 | - |
-| `temperature` | number | 否 | [0, 2] | 采样温度 | 较高值使输出更随机，较低值更确定 |
-| `top_p` | number | 否 | [0, 1] | 核心采样，仅考虑概率排名前 p 的 token | 与 `temperature` 二选一调整即可 |
-| `previous_response_id` | string | 否 | - | 前一轮响应的 ID | 实现有状态多轮对话，无需重新发送完整历史 |
-| `reasoning` | object | 否 | - | 推理模型的配置 | 可设置 `effort` 和 `summary` |
-| `response_format` | object | 否 | JSON Schema | 指定输出格式 | 可配合 Structured Outputs 使用 |
-| `truncation` | string | 否 | "auto" / "disabled"（默认） | 响应的截断策略 | 响应输入超过模型上下文，"auto" 自动删除对话开头的项目，"disabled" 将请求失败 |
-| `store` | boolean | 否 | true/false | 是否存储响应结果 | 后续可通过 API 检索 |
-| `stream` | boolean | 否 | true/false | 是否流式传输响应 | - |
-| `metadata` | object | 否 | 键值对 | 附加到响应的元数据 | 最多 16 个键值对 |
-| `verbosity` | string | 否 | "low" / "medium" / "high" | 限制模型响应的详细程度 | - |
+{{% table cols="1.6:1.3:0.6:1.7:4.8" %}}
+| 参数名 | 类型 | 是否必选 | 候选项 | 含义 / 注意点 |
+| --- | --- | --- | --- | --- |
+| `model` | string | 是 | "gpt-5.5" / "gpt-4o" / "o3" 等 | 指定使用的模型 |
+| `input` | string / array of object | 是 | 自定义 | 输入内容，文本字符串或结构化输入项列表<br>**注**：支持多模态（文本 + 图片 + 文件） |
+| `instructions` | string | 否 | 自定义 | 系统级指令，定义模型的行为方式<br>**注**：替代 Chat Completions 中的 system 消息 |
+| `tools` | array of object | 否 | - | 模型可使用的工具列表<br>**注**：内置：web_search、file_search、code_interpreter、mcp；自定义：function |
+| `tool_choice` | string / object | 否 | "auto" / "required" / "none" | 控制模型如何选择工具<br>**注**：可指定具体工具名称 |
+| `max_output_tokens` | number | 否 | [16, 模型上限] | 响应中可生成的 token 上限（包括可见输出 token 和推理 token） |
+| `max_tool_calls` | number | 否 | - | 限制模型在一次响应中可触发内置工具调用数目的最大限制<br>**注**：超过限制的工具调用请求将被忽略 |
+| `parallel_tool_calls` | boolean | 否 | - | 是否允许模型并行运行工具调用 |
+| `temperature` | number | 否 | [0, 2] | 采样温度<br>**注**：较高值使输出更随机，较低值更确定 |
+| `top_p` | number | 否 | [0, 1] | 核心采样，仅考虑概率排名前 p 的 token<br>**注**：与 `temperature` 二选一调整即可 |
+| `previous_response_id` | string | 否 | - | 前一轮响应的 ID<br>**注**：实现有状态多轮对话，无需重新发送完整历史 |
+| `reasoning` | object | 否 | - | 推理模型的配置<br>**注**：可设置 `effort` 和 `summary` |
+| `response_format` | object | 否 | JSON Schema | 指定输出格式<br>**注**：可配合 Structured Outputs 使用 |
+| `truncation` | string | 否 | "auto" / "disabled"（默认） | 响应的截断策略<br>**注**：响应输入超过模型上下文，"auto" 自动删除对话开头的项目，"disabled" 将请求失败 |
+| `store` | boolean | 否 | true/false | 是否存储响应结果<br>**注**：后续可通过 API 检索 |
+| `stream` | boolean | 否 | true/false | 是否流式传输响应 |
+| `metadata` | object | 否 | 键值对 | 附加到响应的元数据<br>**注**：最多 16 个键值对 |
+| `verbosity` | string | 否 | "low" / "medium" / "high" | 限制模型响应的详细程度 |
 {{% /table %}}
 
 
