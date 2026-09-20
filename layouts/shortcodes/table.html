@@ -9,9 +9,9 @@
 {{- if eq (len $raw) 1 -}}
   {{- $widths = split (trim $cols " ") "," -}}
 {{- else -}}
-  {{- $total := 0 -}}
+  {{- $total := 0.0 -}}
   {{- range $raw -}}
-    {{- $total = add $total (int (trim . " ")) -}}
+    {{- $total = add $total (float (trim . " ")) -}}
   {{- end -}}
   {{- range $raw -}}
     {{- $pct := printf "%.4f%%" (mul (div (float (trim . " ")) (float $total)) 100.0) -}}
