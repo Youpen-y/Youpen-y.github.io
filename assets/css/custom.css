@@ -1,3 +1,24 @@
+/* === Markdown tables =======================================================
+   The core stylesheet sets `table { display: block; overflow-x: auto }` plus
+   `thead, tbody { display: table; width: 100% }`. That turns each section
+   into an INDEPENDENT layout context: header and body compute their own
+   column widths, so whenever their content differs the header no longer
+   lines up with its fields. Restore a single shared column grid and move
+   horizontal scrolling to .table-wrapper (added to every markdown table by
+   the render-table hook). */
+
+.markdown-body table {
+  display: table;
+  width: 100%;
+  overflow-x: visible;
+}
+
+.markdown-body table thead,
+.markdown-body table tbody {
+  display: revert;
+  width: revert;
+}
+
 /* === ASCII architecture diagrams ========================================
    Rendered as raw <pre class="ascii-diagram"> to bypass Hugo's Chroma
    wrapper (which injects `data-lang` labels, per-line `display:flex`
